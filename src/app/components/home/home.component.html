@@ -1,0 +1,35 @@
+<div id="home">
+    <div class="container" [ngClass]="{ 'nav-open': isNavOpen }" [ngStyle]="{ 'overflow': isNavOpen ? 'hidden' : 'auto' }">
+        <div class="box-3"></div>
+        <div class="box-1">
+            <h1>Spring <br>Games <br>2021</h1>
+        </div>
+        <div class="box-2">
+            <h2>Mach dich <br>bereit!</h2>
+            <p>
+                Bald ist es wieder so weit und die Herausforderung beginnt von Neuem. Verliere keine Minute und registriere dich und dein Team!
+            </p>
+            <button class="with-glow" [routerLink]="'/register'">
+                Jetzt anmelden
+            </button>
+        </div>
+        <div class="nav-toggle" (click)="isNavOpen = true">
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+        </div>
+    </div>
+    <nav [ngClass]="{ 'nav-container-open': isNavOpen }">
+        <h3>Navigation</h3>
+        <ul>
+            <li [routerLinkActive]="'active'" [routerLink]="'/home'">Home</li>
+            <li [routerLink]="'/tournaments'">Turniere</li>
+            <li [routerLink]="'/register'">Registrieren</li>
+            <li [routerLink]="'/login'">Anmelden</li>
+        </ul>
+        <div class="nav-close" (click)="isNavOpen = false">
+            <div class="line"></div>
+            <div class="line"></div>
+        </div>
+    </nav>
+</div>

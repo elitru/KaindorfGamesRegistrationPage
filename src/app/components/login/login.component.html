@@ -1,0 +1,36 @@
+<div id="login">
+    <div class="logo" [routerLink]="'/home'">
+        Spring Games 2021
+    </div>
+    <div class="container"></div>
+    <div class="box">
+        <div class="title">
+            <h1>Anmelden</h1>
+            <div class="triangle"></div>
+        </div>
+        <div class="data" *ngIf="!isLoading">
+            <div class="input">
+                <app-input title="Username" placeholder="TheMachine420" [(value)]="username"></app-input>
+            </div>
+            <div class="input">
+                <app-input title="Passwort" placeholder="●●●●●●●●●●●" type="password" [(value)]="password"></app-input>
+            </div>
+            <div class="error" *ngIf="error">
+                <span>
+                    {{ error }}
+                </span>
+            </div>
+            <button (click)="onSubmit()">
+                ANMELDEN
+            </button>
+        </div>
+        <div class="loader-container" *ngIf="isLoading">
+            <div class="loader"></div>
+        </div>
+        <div class="go-register" *ngIf="!isLoading">
+            <span [routerLink]="'/register'">
+                Hier geht’s zur Registrierung
+            </span>
+        </div>
+    </div>
+</div>

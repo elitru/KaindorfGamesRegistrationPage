@@ -1,0 +1,327 @@
+@import "./../../../styles.styl"
+
+#home
+    width 100%
+    height 100%
+    overflow hidden
+    position relative
+
+    .container
+        width 100%
+        height 100%
+        display grid
+        grid-template-rows 50vh calc(100% - 50vh)
+        grid-template-columns 50vh calc(100% - 50vh)
+        position relative
+        transition all 500ms
+
+        .box-1
+            background dark
+            grid-column-start 1
+            grid-column-end 1
+            grid-row-start 1
+            grid-row-end 1
+            display grid
+            place-items center
+
+            h1
+                padding 0px
+                margin 0px
+                color white
+                font-weight 500
+                text-align center
+                font-size 70px
+                line-height 100px
+
+        .box-2
+            background light
+            grid-column-start 1
+            grid-column-end 1
+            grid-row-start 2
+            grid-row-end 2
+            display flex
+            flex-direction column
+            align-content center
+            justify-content center
+
+            h2
+                padding 0px
+                margin 0px
+                color dark
+                font-weight 600
+                text-align center
+                font-size 50px
+                margin-bottom 40px
+
+            p
+                font-size 20px
+                color medium
+                margin 0px
+                padding 0px 15%
+                line-height 38px
+                text-align center
+                margin-bottom 70px
+
+            button
+                margin 0px 15%
+
+        .box-3
+            grid-column-start 2
+            grid-column-end 2
+            grid-row-start 1
+            grid-row-end 3
+            background url('/assets/mc_2.jpg') no-repeat right
+            background-size cover
+
+        .nav-toggle
+            position absolute
+            top 30px
+            right 30px
+            background transparent
+            width 60px
+            height 60px
+            display flex
+            flex-direction column
+            align-content center
+            justify-content space-evenly
+            cursor pointer
+            transition all 300ms
+            padding 5px 0px
+
+            .line
+                width 60%
+                height 2px
+                background dark
+                margin 0 auto
+                transition all 100ms
+
+            &:hover
+                background dark
+
+            &:hover .line
+                background white
+
+    nav
+        width 400px
+        height 100%
+        position absolute
+        top 0px
+        right -400px
+        font-size 14px
+        padding 30px 50px
+        background light
+        transition all 400ms
+        box-shadow inset 4px 0px 10px 0px rgba(0,0,0, .25)
+        transition all 500ms
+
+        h3
+            margin 0px
+            margin-top 80px
+            padding 10px 0px
+            text-transform uppercase
+            color medium
+
+        ul
+            list-style none
+            margin 0px
+            padding 0px
+            margin-top 20px
+
+        li
+            width 100%
+            font-size 20px
+            padding 18px 25px
+            margin 10px 0px
+            font-weight 300
+            color dark
+            cursor pointer
+            transition all 300ms
+
+            &:hover
+                color sec
+
+        .active
+            color white
+            background pri
+            font-weight 600
+
+        .nav-close
+            width 42px
+            height 42px
+            position absolute
+            top 40px
+            right 25px
+            cursor pointer
+            transition all 300ms
+
+            &:hover
+                color sec
+
+            .line
+                height 2px
+                background dark
+                margin 0 auto
+                transform rotate(45deg)
+
+                &:last-child
+                    transform rotate(-45deg)
+                    margin-top -2px
+
+    .nav-container-open
+        display block
+        right 0px
+
+    .nav-open
+        transform translateX(-400px)
+        filter blur(4px)
+        overflow visible
+
+        .nav-toggle
+            display none
+
+@media screen and (max-height 1200px)
+    #home
+        .container
+            .box-2
+                h2
+                    margin-bottom 20px
+
+                p
+                    margin-bottom 30px
+
+@media screen and (max-height 1000px)
+    #home
+        .container
+            .box-1
+                h1
+                    font-size 60px
+                    line-height 80px
+
+            .box-2
+                br
+                    display none
+
+                h2
+                    font-size 40px
+                    margin-bottom 30px
+
+                p
+                    font-size 17px
+                    line-height 35px
+
+                button
+                    font-size 20px
+                    padding 18px 20px 16px 20px
+
+@media screen and (max-width 1500px)
+    #home
+        .container
+            display flex
+            flex-direction row
+            align-content stretch
+            align-items stretch
+            flex-wrap wrap
+            justify-content space-between
+            overflow auto
+
+            .box-3
+                width 100%
+                height: 65%
+
+            .box-1,
+            .box-2
+                width 50%
+                height 35%
+
+            .box-1
+                h1
+                    font-size 50px
+                    line-height 80px
+
+                    br:first-child
+                        display none
+
+            .box-2
+                h2
+                    font-size 40px
+
+                    br
+                        display none
+
+                p
+                    font-size 17px
+                    line-height 34px
+
+                button
+                    font-size 19px
+                    padding 17px 20px 15px 20px
+                    max-width 300px !important
+                    min-width 300px
+                    width 100%
+                    margin 0 auto
+
+@media screen and (max-width 1100px)
+    #home
+        .container
+            .box-1
+                h1
+                    font-size 45px
+
+            .box-2
+                h2
+                    font-size 32px
+                p
+                    font-size 16px
+                    line-height 34px
+
+@media screen and (max-width 800px)
+    #home
+        .container
+            .box-3
+                height 80%
+                background url('/assets/mc_3.jpg') no-repeat left top
+
+            .box-1,
+            .box-2
+                width 100%
+
+            .box-1
+                height auto
+                padding 40px 0px
+
+                h1
+                    font-size 45px
+
+            .box-2
+                height 400px
+
+                h2
+                    font-size 32px
+                p
+                    font-size 16px
+                    line-height 34px
+
+            .nav-toggle
+                background white
+
+@media screen and (max-width 550px)
+    #home
+        .container
+            .box-3
+                height 100%
+
+            .box-1
+                height auto
+                padding 20px 0px
+
+        nav
+            width 340px
+            right -340px
+            padding 30px 30px
+
+            li
+                font-size 17px
+                margin 5px 0px
+
+        .nav-open
+            transform translateX(-340px)

@@ -1,0 +1,71 @@
+<div id="tournaments">
+    <div class="container" [ngClass]="{ 'form-open': isFormOpen }">
+        <aside>
+            <ul>
+                <section [ngStyle]="{ 'top': highlighterTop + 'px' }">
+                    <span></span>
+                </section>
+                <li *ngFor="let game of games; let i = index" [ngClass]="{ 'active': activeGame == game }" (click)="onToggleGame(game, i)">
+                    {{ game.name }}
+                </li>
+            </ul>
+        </aside>
+        <div class="data">
+            <div class="table">
+                <div class="header">
+                    <section class="size">
+                        Grösse
+                    </section>
+                    <section class="team">
+                        Teamname
+                    </section>
+                    <section class="members">
+                        Mitglieder
+                    </section>
+                    <button (click)="toggleTeamCreator()">
+                        Team erstellen
+                    </button>
+                </div>
+                <div class="item" *ngFor="let team of teams">
+                    <section class="size">
+                        {{ team.users.length }}/{{ team.requiredTeamSize }}
+                    </section>
+                    <section class="team">
+                        {{ team.teamName }}
+                    </section>
+                    <section class="members">
+                        {{ getTeamMembers(team) }}
+                    </section>
+                    <section class="options">
+                        <button [disabled]="team.users.length === team.requiredTeamSize">
+                            Beitreten
+                        </button>
+                        <i *ngIf="!team.passwordProtected" class="fas fa-lock-open"></i>
+                        <i *ngIf="team.passwordProtected" class="fas fa-lock pw"></i>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form" [ngClass]="{ 'form-container-open': isFormOpen }">
+        <div class="team-creator-close" (click)="toggleTeamCreator()">
+            <div class="line"></div>
+            <div class="line"></div>
+        </div>
+        <h3>Team erstellen</h3>
+        <div class="loader-container" *ngIf="isFormLoading">
+            <div class="loader"></div>
+        </div>
+        <div *ngIf="!isFormLoading">
+            <section>
+                <app-input title="Teamname" placeholder="#Zerstörer69" [(value)]="teamName"></app-input>
+            </section>
+            <section>
+                <app-input title="Passwort (optional)" placeholder="#Zerstörer69" [(value)]="teamName"></app-input>
+            </section>
+            <button (click)="onCreateTeam()">
+                Team erstellen
+            </button>
+        </div>
+    </div>
+</div>
