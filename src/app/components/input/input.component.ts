@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 @Component({
   selector: 'app-input',
   templateUrl: './input.component.html',
-  styleUrls: ['./input.component.styl']
+  styleUrls: ['./input.component.styl'],
 })
 export class InputComponent implements OnInit {
   @Input()
@@ -18,9 +18,12 @@ export class InputComponent implements OnInit {
   @Output()
   public valueChange = new EventEmitter<string>();
 
-  constructor() { }
+  constructor() {}
 
-  public ngOnInit(): void {
-  
+  public ngOnInit(): void {}
+
+  // Events
+  public onChangeValue(): void {
+    this.valueChange.emit(this.value);
   }
 }

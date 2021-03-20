@@ -27,15 +27,13 @@ export class LoginComponent implements OnInit {
   public ngOnInit(): void {}
 
   private validateInputs(): boolean {
-    //return this.username !== "" && this.password !== "";
-    return true;
+    return this.username !== "" && this.password !== "";
   }
 
   private getLoginValues(): LoginRequest {
-    // TODO read values from input
     return {
-      userName: 'Suffix',
-      password: 'thisisverysafe',
+      userName: this.username,
+      password: this.password,
     };
   }
 
