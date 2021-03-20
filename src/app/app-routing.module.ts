@@ -26,8 +26,8 @@ const routes: Routes = [
   },
   {
     path: 'tournaments',
-    component: TournamentsComponent,
-    canActivate: [ AuthGuard ]
+    component: TournamentsComponent//,
+    //canActivate: [ AuthGuard ]
   }
 ];
 

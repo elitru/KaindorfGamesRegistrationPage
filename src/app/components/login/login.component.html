@@ -10,10 +10,10 @@
         </div>
         <div class="data" *ngIf="!isLoading">
             <div class="input">
-                <app-input title="Username" placeholder="TheMachine420" [(value)]="username"></app-input>
+                <app-input title="Username" placeholder="TheMachine420" name="username" [(value)]="username"></app-input>
             </div>
             <div class="input">
-                <app-input title="Passwort" placeholder="●●●●●●●●●●●" type="password" [(value)]="password"></app-input>
+                <app-input title="Passwort" placeholder="●●●●●●●●●●●" type="password" name="password" [(value)]="password"></app-input>
             </div>
             <div class="error" *ngIf="error">
                 <span>

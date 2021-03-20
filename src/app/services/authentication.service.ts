@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
+import { LoginResponse } from '../models/client/responses/LoginResponse';
 
 @Injectable({
   providedIn: 'root',
 })
-export class AuthenticationServiceService {
+export class AuthenticationService {
   private _token: string | null = null;
   private _tokenExpiration: Date | null = null;
 
@@ -43,7 +44,7 @@ export class AuthenticationServiceService {
       const { token, tokenExpire } = this.get<{
         token: string;
         tokenExpire: string;
-      }>(AuthenticationServiceService.AUTH_KEY);
+      }>(AuthenticationService.AUTH_KEY);
       const tokenExpiration = new Date(parseInt(tokenExpire));
 
       // check if token hasn't expired yet
@@ -59,5 +60,14 @@ export class AuthenticationServiceService {
 
   public get isLoggedIn(): boolean {    
     return this._token !== null && this._tokenExpiration !== null && this._tokenExpiration > new Date();
+  }
+
+  public get token(): string {
+    if(!this._token) throw new Error('No token found! Is the user logged in?');
+    return this._token;
+  }
+
+  public updateValues(values: LoginResponse): void {
+    this.save(AuthenticationService.AUTH_KEY, values);
   }
 }
