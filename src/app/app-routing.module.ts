@@ -4,6 +4,7 @@ import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { TournamentsComponent } from './components/tournaments/tournaments.component';
+import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
   {
@@ -25,7 +26,8 @@ const routes: Routes = [
   },
   {
     path: 'tournaments',
-    component: TournamentsComponent
+    component: TournamentsComponent,
+    canActivate: [ AuthGuard ]
   }
 ];
 
