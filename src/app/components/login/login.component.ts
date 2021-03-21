@@ -59,11 +59,11 @@ export class LoginComponent implements OnInit {
         // redirect
       } catch (err) {
         // load error into error variable in order to show it
-        console.log(err);
+        this.error = 'Error logging in - please check your credentials.';
         this.isLoading = false;
       }
     } else {
-      console.log('not valid');
+      this.error = 'Please provide username + password';
       this.isLoading = false;
     }
   }

@@ -19,6 +19,7 @@ export class TournamentsComponent implements OnInit {
   public ingameName: string = '';
   public password: string = '';
   public isFormLoading: boolean = false;
+  public error: string = '';
 
   constructor(
     private gameModesService: GameModesService,
@@ -103,11 +104,11 @@ export class TournamentsComponent implements OnInit {
       this.isFormOpen = false;
       // clear values from form
       this.clear();
-      console.log(response);
     } catch (err) {
-      // TODO: proper error handling :)
+      // hide loader
       this.isFormLoading = false;
-      console.log(err);
+      // TODO display error in GUI
+      this.error = 'The data entered was invalid.';
     }
   }
 }

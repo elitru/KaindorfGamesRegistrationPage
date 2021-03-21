@@ -13,6 +13,10 @@ export class APIRoutes {
       path: `${APIRoutes.BaseRoute}/login`,
       requiresToken: false,
     };
+    public static readonly Register: ApplicationRoute = {
+      path: `${APIRoutes.BaseRoute}/users`,
+      requiresToken: false,
+    };
   };
 
   /**
