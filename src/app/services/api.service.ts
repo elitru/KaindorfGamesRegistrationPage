@@ -25,4 +25,17 @@ export class ApiService {
       return this.http.post<Result>(route.path, payload).toPromise();
     }
   }
+
+  public get<Result>(route: ApplicationRoute): Promise<Result> {
+    // requires token --> attach header
+    if (route.requiresToken) {
+      return this.http
+        .get<Result>(route.path, {
+          headers: APIHeaders.get(this.authenticationService.token),
+        })
+        .toPromise();
+    } else {
+      return this.http.get<Result>(route.path).toPromise();
+    }
+  }
 }

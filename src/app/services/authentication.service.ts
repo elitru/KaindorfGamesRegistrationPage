@@ -41,11 +41,8 @@ export class AuthenticationService {
 
   private loadUserDataFromStorage(): void {
     try {
-      const { token, tokenExpire } = this.get<{
-        token: string;
-        tokenExpire: string;
-      }>(AuthenticationService.AUTH_KEY);
-      const tokenExpiration = new Date(parseInt(tokenExpire));
+      const { token, expiration } = this.get<LoginResponse>(AuthenticationService.AUTH_KEY);
+      const tokenExpiration = new Date(parseInt(expiration));
 
       // check if token hasn't expired yet
       if (tokenExpiration > new Date()) {
@@ -58,7 +55,7 @@ export class AuthenticationService {
     }
   }
 
-  public get isLoggedIn(): boolean {    
+  public get isLoggedIn(): boolean {
     return this._token !== null && this._tokenExpiration !== null && this._tokenExpiration > new Date();
   }
 
@@ -68,6 +65,8 @@ export class AuthenticationService {
   }
 
   public updateValues(values: LoginResponse): void {
+    this._token = values.token;
+    this._tokenExpiration = new Date(parseInt(values.expiration));
     this.save(AuthenticationService.AUTH_KEY, values);
   }
 }

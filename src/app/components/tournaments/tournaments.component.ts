@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Game } from 'src/app/models/games';
+import { Game } from 'src/app/models/application/games';
+import { GameModesService } from 'src/app/services/game-modes.service';
+import { ParticipationService } from 'src/app/services/participation.service';
 
 @Component({
   selector: 'app-tournaments',
@@ -7,82 +9,46 @@ import { Game } from 'src/app/models/games';
   styleUrls: ['./tournaments.component.styl']
 })
 export class TournamentsComponent implements OnInit {
-  public games: Game[] = [
-    {
-      emojiName: '',
-      name: 'MC Varo',
-      teamSize: 2
-    },
-    {
-      emojiName: '',
-      name: 'MC 1vs1',
-      teamSize: 2
-    },
-    {
-      emojiName: '',
-      name: 'MC BedWars',
-      teamSize: 2
-    },
-    {
-      emojiName: '',
-      name: 'CS:GO',
-      teamSize: 2
-    },
-    {
-      emojiName: '',
-      name: 'Rocket League',
-      teamSize: 2
-    }
-  ];
-  public activeGame: Game = this.games[0];
+  
   public highlighterTop: number = 0;
-
-  public teams = [
-    {
-      id: new Date(),
-      requiredTeamSize: 2,
-      teamName: '#Schwitzer',
-      passwordProtected: true,
-      users: [
-        {
-          discordName: "user1",
-          ingameName: "user1"
-        }
-      ]
-    },
-    {
-      id: new Date(),
-      requiredTeamSize: 2,
-      teamName: '#Schwitzer',
-      passwordProtected: false,
-      users: [
-        {
-          discordName: "user1",
-          ingameName: "user1"
-        }
-      ]
-    }
-  ];
 
   public isFormOpen: boolean = false;
   public teamName: string = '';
   public password: string = '';
   public isFormLoading: boolean = false;
 
-  constructor() { }
+  constructor(private gameModesService: GameModesService, private participationService: ParticipationService) { }
 
   public ngOnInit(): void {
   
+  }
+
+  public get games() {
+    return this.gameModesService.games;
+  }
+
+  public get activeGame() {
+    return this.gameModesService.activeGame;
+  }
+
+  public get teams() {
+    return this.participationService.participations;
   }
 
   public getTeamMembers(team: any): string {
     return team.users.map(u => u.ingameName).join(', ');
   }
 
+  /**
+   * This method is called when the active game is changed.
+  * @param game The clicked game
+   * @param index The index of the clicked game
+   * @returns 
+   */
   public onToggleGame(game: Game, index: number): void {
     if(this.activeGame === game) return;
 
-    this.activeGame = game;
+    this.gameModesService.activeGame = game;
     this.highlighterTop = 80 * index;
   }
 
