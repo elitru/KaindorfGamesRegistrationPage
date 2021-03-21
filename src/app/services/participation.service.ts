@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Participation } from '../models/application/participation';
+import { CreateTeamRequest } from '../models/client/requests/CreateTeamRequest';
 import { ApiService } from './api.service';
 import { APIRoutes } from './APIRoutes';
 import { GameModesService } from './game-modes.service';
@@ -36,7 +37,10 @@ export class ParticipationService {
     );
   }
 
-  public async reload(): Promise<void> {
+  public async createTeam(req: CreateTeamRequest): Promise<void> {
+    // submit request for creating team
+    await this.apiService.post(APIRoutes.Participation.Create, req);
+    // reload participations
     this.__participations = await this.fetch();
   }
 

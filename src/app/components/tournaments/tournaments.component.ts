@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { Game } from 'src/app/models/application/games';
+import { Participation } from 'src/app/models/application/participation';
 import { CreateTeamRequest } from 'src/app/models/client/requests/CreateTeamRequest';
 import { ApiService } from 'src/app/services/api.service';
 import { APIRoutes } from 'src/app/services/APIRoutes';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 import { GameModesService } from 'src/app/services/game-modes.service';
 import { ParticipationService } from 'src/app/services/participation.service';
 
@@ -15,19 +17,23 @@ export class TournamentsComponent implements OnInit {
   public highlighterTop: number = 0;
 
   public isFormOpen: boolean = false;
+  public isDialogueOpen: boolean = false;
   public teamName: string = '';
   public ingameName: string = '';
   public password: string = '';
   public isFormLoading: boolean = false;
   public error: string = '';
+  public isCurrentUserInGame: boolean = true;
 
   constructor(
     private gameModesService: GameModesService,
     private participationService: ParticipationService,
-    private apiService: ApiService
-  ) {}
+    private authentiationService: AuthenticationService
+  ) {
+  }
 
-  public ngOnInit(): void {}
+  public ngOnInit(): void {
+  }
 
   public get games() {
     return this.gameModesService.games;
@@ -66,6 +72,9 @@ export class TournamentsComponent implements OnInit {
   public onToggleGame(game: Game, index: number): void {
     if (this.activeGame === game) return;
 
+    // check if user is already IN THIS GAME
+    this.isCurrentUserInGame = this.currentUserInAnyTeam();
+
     this.gameModesService.activeGame = game;
     this.highlighterTop = 80 * index;
   }
@@ -76,8 +85,8 @@ export class TournamentsComponent implements OnInit {
       return;
     }
 
-    this.teamName = '';
-    this.password = '';
+    this.clear();
+
     this.isFormLoading = false;
     this.isFormOpen = true;
   }
@@ -88,16 +97,48 @@ export class TournamentsComponent implements OnInit {
     this.password = "";
   }
 
+  public toggleDialogue(team: Participation) {
+    this.isDialogueOpen = !this.isDialogueOpen;
+  }
+
+  /**
+   * To allow the user to close the dialogue using "Escape"
+   * @param event 
+   */
+  @HostListener(`document:keydown.escape`, [`$event`])
+  public onEscapePressed(event: KeyboardEvent) {
+    this.isDialogueOpen = false;
+  }
+
+  public onCancelClick(event: any):void {
+    if (event.target.id === "overlay") {
+      this.isDialogueOpen = false;
+    }
+  }
+
+  /**
+   * Checks whether the specified team contains the currently authenticated user
+   * @param team The team to check
+   */
+  public currentUserInAnyTeam(): boolean {
+    // loop through all the current participations
+    for (let team of this.teams) {
+      if (team.users.filter(t => t.id == this.authentiationService.currentUser.id).length > 0) {
+        // user is in ANY team --> disable all teams!
+        return true;
+      }
+    }
+    return false;
+  }
+
   public async onCreateTeam(): Promise<void> {
     try {
       // try to get data
       const data = this.getTeamCreateData();
       // show loader
       this.isFormLoading = true;
-      // submit request
-      const response = await this.apiService.post(APIRoutes.Participation.Create, data);
-      // fetch new participations
-      await this.participationService.reload();
+      // create new team
+      await this.participationService.createTeam(data);
       // switch off loader
       this.isFormLoading = false;
       // close form

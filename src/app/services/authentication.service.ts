@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { LoginResponse } from '../models/client/responses/LoginResponse';
+import { ResponseUser } from '../models/client/responses/ResponseUser';
 
 @Injectable({
   providedIn: 'root',
@@ -7,6 +8,7 @@ import { LoginResponse } from '../models/client/responses/LoginResponse';
 export class AuthenticationService {
   private _token: string | null = null;
   private _tokenExpiration: Date | null = null;
+  private _user: ResponseUser | null = null;
 
   static AUTH_KEY: string = 'AUTH_TOKEN';
 
@@ -41,13 +43,14 @@ export class AuthenticationService {
 
   private loadUserDataFromStorage(): void {
     try {
-      const { token, expiration } = this.get<LoginResponse>(AuthenticationService.AUTH_KEY);
+      const { token, expiration, user} = this.get<LoginResponse>(AuthenticationService.AUTH_KEY);
       const tokenExpiration = new Date(parseInt(expiration));
 
       // check if token hasn't expired yet
       if (tokenExpiration > new Date()) {
         this._token = token;
         this._tokenExpiration = tokenExpiration;
+        this._user = user;
       }
     } catch (err) {
       // no user found
@@ -56,7 +59,7 @@ export class AuthenticationService {
   }
 
   public get isLoggedIn(): boolean {
-    return this._token !== null && this._tokenExpiration !== null && this._tokenExpiration > new Date();
+    return this._token !== null && this._user !== null && this._tokenExpiration !== null && this._tokenExpiration > new Date();
   }
 
   public get token(): string {
@@ -64,9 +67,14 @@ export class AuthenticationService {
     return this._token;
   }
 
+  public get currentUser():ResponseUser {
+    return this._user;
+  }
+
   public updateValues(values: LoginResponse): void {
     this._token = values.token;
     this._tokenExpiration = new Date(parseInt(values.expiration));
+    this._user = values.user;
     this.save(AuthenticationService.AUTH_KEY, values);
   }
 }

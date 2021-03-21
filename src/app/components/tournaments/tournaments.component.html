@@ -1,5 +1,5 @@
 <div id="tournaments">
-  <div class="container" [ngClass]="{ 'form-open': isFormOpen }">
+  <div class="container" [ngClass]="{ 'form-open': isFormOpen, 'blur-content': isDialogueOpen}">
     <aside>
       <ul>
         <section [ngStyle]="{ top: highlighterTop + 'px' }">
@@ -33,7 +33,7 @@
             {{ getTeamMembers(team) }}
           </section>
           <section class="options">
-            <button [disabled]="team.users.length === team.requiredTeamSize">
+            <button [disabled]="team.users.length === team.requiredTeamSize || currentUserInAnyTeam()" (click)="toggleDialogue(team)">
               Beitreten
             </button>
             <i *ngIf="!team.passwordProtected" class="fas fa-lock-open"></i>
@@ -76,5 +76,33 @@
       </section>
       <button (click)="onCreateTeam()">Team erstellen</button>
     </div>
+  </div>
+  <div id="overlay" *ngIf="isDialogueOpen" (click)="onCancelClick($event)">
+    <div class="box">
+      <div class="data" *ngIf="!isLoading">
+          <div class="input">
+              <app-input title="Ingame-Name" placeholder="TheMachine420" name="username" [(value)]="ingameName"></app-input>
+          </div>
+          <div class="input">
+              <app-input title="Passwort" placeholder="Team-Password" type="password" name="password" [(value)]="password"></app-input>
+          </div>
+          <div class="error" *ngIf="error">
+              <span>
+                  {{ error }}
+              </span>
+          </div>
+          <button (click)="onSubmit()">
+              BEITRETEN
+          </button>
+      </div>
+      <div class="loader-container" *ngIf="isLoading">
+          <div class="loader"></div>
+      </div>
+      <div class="go-register" *ngIf="!isLoading">
+          <span [routerLink]="'/register'">
+              Hier geht’s zur Registrierung
+          </span>
+      </div>
+  </div>
   </div>
 </div>
