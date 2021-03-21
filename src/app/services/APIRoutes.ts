@@ -33,6 +33,10 @@ export class APIRoutes {
         path: `${APIRoutes.BaseRoute}/participations`,
         requiresToken: true,
       };
+      public static readonly Create: ApplicationRoute = {
+        path: `${APIRoutes.BaseRoute}/participations`,
+        requiresToken: true,
+      };
     };
 }
 
@@ -47,7 +51,7 @@ export class APIHeaders {
     if (!token) throw new Error('API token must be provided!');
 
     const headerValues = {};
-    (headerValues as any)[APIHeaders.AuthToken] = token;
+    (headerValues as any)[APIHeaders.AuthToken] = `Bearer ${token}`;
 
     return new HttpHeaders(headerValues);
   }

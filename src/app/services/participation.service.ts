@@ -14,7 +14,7 @@ export class ParticipationService {
     private apiService: ApiService,
     private gameModesService: GameModesService
   ) {
-    this.apiService.get<Participation[]>(APIRoutes.Participation.All).then(
+    this.fetch().then(
       (result) => {
         this.__participations = result;
       },
@@ -34,5 +34,13 @@ export class ParticipationService {
     return this.__participations.filter(
       (p) => p.gameName == this.gameModesService.activeGame.name
     );
+  }
+
+  public async reload(): Promise<void> {
+    this.__participations = await this.fetch();
+  }
+
+  private async fetch(): Promise<Participation[]> {
+    return this.apiService.get<Participation[]>(APIRoutes.Participation.All);
   }
 }
