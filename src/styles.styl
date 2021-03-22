@@ -6,6 +6,7 @@ dark = #2B2B2B
 medium = #646A6C
 light = #EEF6F9
 error = #e92e2e
+errorDark = #c40e0e;
 success = #2cd756
 
 *
@@ -48,9 +49,13 @@ button
         &:hover
             transform none
 
-.with-glow hover,
-.with-glow focus
+.with-glow:hover,
+.with-glow:focus
     box-shadow 3px 3px 50px 20px rgba(51, 204, 195, .5)
+
+.error
+    background error
+    border-bottom-color errorDark
 
 .loader 
   border 8px solid white

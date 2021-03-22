@@ -2,6 +2,7 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { Game } from 'src/app/models/application/games';
 import { Participation } from 'src/app/models/application/participation';
 import { CreateTeamRequest } from 'src/app/models/client/requests/CreateTeamRequest';
+import { RequestJoinTeam } from 'src/app/models/client/requests/JoinTeamRequest';
 import { ApiService } from 'src/app/services/api.service';
 import { APIRoutes } from 'src/app/services/APIRoutes';
 import { AuthenticationService } from 'src/app/services/authentication.service';
@@ -24,16 +25,15 @@ export class TournamentsComponent implements OnInit {
   public isFormLoading: boolean = false;
   public error: string = '';
   public isCurrentUserInGame: boolean = true;
+  public currentParticipation: Participation | null = null;
 
   constructor(
-    private gameModesService: GameModesService,
     private participationService: ParticipationService,
-    private authentiationService: AuthenticationService
-  ) {
-  }
+    public authentiationService: AuthenticationService,
+    public gameModesService: GameModesService
+  ) {}
 
-  public ngOnInit(): void {
-  }
+  public ngOnInit(): void {}
 
   public get games() {
     return this.gameModesService.games;
@@ -45,6 +45,10 @@ export class TournamentsComponent implements OnInit {
 
   public get teams() {
     return this.participationService.participations;
+  }
+
+  public isInTeam(team: Participation): boolean {
+    return (this.authentiationService.currentUser) && team.users.find(u => u.id === this.authentiationService.currentUser.id) !== undefined;
   }
 
   public getTeamMembers(team: any): string {
@@ -59,8 +63,19 @@ export class TournamentsComponent implements OnInit {
       ingameName: this.ingameName,
       teamName: this.teamName,
       password: this.password,
-      gameName: this.gameModesService.activeGame.name
+      gameName: this.gameModesService.activeGame.name,
     };
+  }
+
+  public getJoinTeamData(): RequestJoinTeam {
+    if (this.currentParticipation.passwordProtected && this.password === "" || this.ingameName === "") {
+      throw new Error("The given data is invalid");
+    } 
+    return {
+      teamId: this.currentParticipation.id,
+      ingameName: this.ingameName,
+      password: this.password
+    }
   }
 
   /**
@@ -92,26 +107,28 @@ export class TournamentsComponent implements OnInit {
   }
 
   private clear(): void {
-    this.ingameName = "";
-    this.teamName = "";
-    this.password = "";
+    this.ingameName = '';
+    this.teamName = '';
+    this.password = '';
   }
 
   public toggleDialogue(team: Participation) {
+    this.clear();
+    this.currentParticipation = team;
     this.isDialogueOpen = !this.isDialogueOpen;
   }
 
   /**
    * To allow the user to close the dialogue using "Escape"
-   * @param event 
+   * @param event
    */
   @HostListener(`document:keydown.escape`, [`$event`])
   public onEscapePressed(event: KeyboardEvent) {
     this.isDialogueOpen = false;
   }
 
-  public onCancelClick(event: any):void {
-    if (event.target.id === "overlay") {
+  public onCancelClick(event: any): void {
+    if (event.target.id === 'overlay') {
       this.isDialogueOpen = false;
     }
   }
@@ -122,13 +139,29 @@ export class TournamentsComponent implements OnInit {
    */
   public currentUserInAnyTeam(): boolean {
     // loop through all the current participations
+    if(!this.authentiationService.currentUser) return false;
+    
     for (let team of this.teams) {
-      if (team.users.filter(t => t.id == this.authentiationService.currentUser.id).length > 0) {
+      if (
+        team.users.filter(
+          (t) => t.id == this.authentiationService.currentUser.id
+        ).length > 0
+      ) {
         // user is in ANY team --> disable all teams!
         return true;
       }
     }
     return false;
+  }
+
+  public async onLeaveTeam({ id }: Participation): Promise<void> {
+    try {
+      await this.participationService.leaveTeam({
+        teamId: id
+      })
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   public async onCreateTeam(): Promise<void> {
@@ -149,7 +182,27 @@ export class TournamentsComponent implements OnInit {
       // hide loader
       this.isFormLoading = false;
       // TODO display error in GUI
-      this.error = 'The data entered was invalid.';
+      //this.error = 'The data entered was invalid.';
+      console.log(err);
+    }
+  }
+
+  public async onJoinTeam(): Promise<void> {
+    try {
+      // try to get data
+      const data = this.getJoinTeamData();
+      // create new team
+      await this.participationService.joinTeam(data);
+      // close form
+      this.isDialogueOpen = false;
+      // clear values from form
+      this.clear();
+    } catch (err) {
+      // hide loader
+      this.isFormLoading = false;
+      // TODO display error in GUI
+      //this.error = 'The data entered was invalid.';
+      console.log(err);
     }
   }
 }

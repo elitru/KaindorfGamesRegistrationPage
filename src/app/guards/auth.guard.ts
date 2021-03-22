@@ -14,9 +14,10 @@ import { AuthenticationService } from '../services/authentication.service';
 })
 export class AuthGuard implements CanActivate {
   constructor(private authenticationService: AuthenticationService,
-    private router: Router) {
+              private router: Router) {
 
-    }
+  }
+
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
@@ -25,6 +26,8 @@ export class AuthGuard implements CanActivate {
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
+    if(this.authenticationService.isReadonly) return true;
+
     if (!this.authenticationService.isLoggedIn) {
       this.router.navigateByUrl('/login');
       return false;

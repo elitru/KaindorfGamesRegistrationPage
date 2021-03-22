@@ -27,7 +27,7 @@ export class GameModesService {
     return this.__games;
   }
 
-  public get activeGame() {
+  public get activeGame():Game {
     return this.__activeGame;
   }
 

@@ -5,6 +5,7 @@ import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { TournamentsComponent } from './components/tournaments/tournaments.component';
 import { AuthGuard } from './guards/auth.guard';
+import { ReadOnlyGuard } from './guards/read-only.guard';
 
 const routes: Routes = [
   {
@@ -18,11 +19,13 @@ const routes: Routes = [
   },
   {
     path: 'login',
-    component: LoginComponent
+    component: LoginComponent,
+    canActivate: [ ReadOnlyGuard ]
   },
   {
     path: 'register',
-    component: RegisterComponent
+    component: RegisterComponent,
+    canActivate: [ ReadOnlyGuard ]
   },
   {
     path: 'tournaments',

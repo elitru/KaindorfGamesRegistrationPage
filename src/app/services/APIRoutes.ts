@@ -32,12 +32,31 @@ export class APIRoutes {
     /**
    * @description all api endpoints useful for the various game modes
    */
+     public static readonly General = class {
+      public static readonly IsReadOnly: ApplicationRoute = {
+        path: `${APIRoutes.BaseRoute}/readOnly`,
+        requiresToken: false,
+      };
+    };
+  
+
+    /**
+   * @description all api endpoints useful for the various game modes
+   */
      public static readonly Participation = class {
       public static readonly All: ApplicationRoute = {
         path: `${APIRoutes.BaseRoute}/participations`,
-        requiresToken: true,
+        requiresToken: false,
       };
       public static readonly Create: ApplicationRoute = {
+        path: `${APIRoutes.BaseRoute}/participations`,
+        requiresToken: true,
+      };
+      public static readonly Join: ApplicationRoute = {
+        path: `${APIRoutes.BaseRoute}/participations`,
+        requiresToken: true,
+      };
+      public static readonly Leave: ApplicationRoute = {
         path: `${APIRoutes.BaseRoute}/participations`,
         requiresToken: true,
       };

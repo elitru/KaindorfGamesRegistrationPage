@@ -22,6 +22,15 @@
         background dark
         display grid
         place-items center
+        position relative
+
+        img
+            width 120px
+            height auto
+            position absolute
+            top 8%
+            left 50%
+            transform translateX(-50%)
 
         ul
             padding 0px
@@ -86,7 +95,7 @@
                 padding 28px 40px
                 position relative
 
-                section 
+                section
                     color white
                     font-size 18px
                     font-weight 600
@@ -107,23 +116,24 @@
                 align-content stretch
                 align-items center
                 justify-content space-between
-                padding 18px 40px
+                padding 24px 40px
                 border-bottom solid 3px pri
                 margin-bottom 30px
                 cursor default
 
             .size
-                    width 150px
+                width 150px
                 
             .team
                 width 20%
 
             .members
-                width calc(70% - 150px)
+                width calc(80% - 150px)
 
             .item
                 background light
                 color dark
+                position relative
 
                 i 
                     color success
@@ -144,6 +154,10 @@
                     align-items center
                     align-content center
                     justify-content flex-start
+                    position absolute
+                    top 50%
+                    right 20px
+                    transform translateY(-50%)
 
                     input
                         width 100%
@@ -248,6 +262,7 @@
             width 550px
             height auto
             padding-bottom 60px
+            padding-top 24px
             border-bottom solid 7px pri
             background white
             .title

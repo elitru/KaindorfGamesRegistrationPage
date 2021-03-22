@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Participation } from '../models/application/participation';
 import { CreateTeamRequest } from '../models/client/requests/CreateTeamRequest';
+import { RequestJoinTeam } from '../models/client/requests/JoinTeamRequest';
+import { RequestLeaveTeam } from '../models/client/requests/RequestLeaveTeam';
 import { ApiService } from './api.service';
 import { APIRoutes } from './APIRoutes';
 import { GameModesService } from './game-modes.service';
@@ -36,12 +38,25 @@ export class ParticipationService {
       (p) => p.gameName == this.gameModesService.activeGame.name
     );
   }
+  
 
   public async createTeam(req: CreateTeamRequest): Promise<void> {
     // submit request for creating team
     await this.apiService.post(APIRoutes.Participation.Create, req);
     // reload participations
     this.__participations = await this.fetch();
+  }
+
+  public async joinTeam(req: RequestJoinTeam): Promise<void> {
+    await this.apiService.put(APIRoutes.Participation.Join, req);
+    // reload participations
+    this.__participations = await this.fetch();
+  }
+
+  public async leaveTeam(req: RequestLeaveTeam): Promise<void> {
+    await this.apiService.delete(APIRoutes.Participation.Leave, req);
+     // reload participations
+     this.__participations = await this.fetch();
   }
 
   private async fetch(): Promise<Participation[]> {

@@ -7,10 +7,14 @@
         <div class="box-2">
             <h2>Mach dich <br>bereit!</h2>
             <p>
-                Bald ist es wieder so weit und die Herausforderung beginnt von Neuem. Verliere keine Minute und registriere dich und dein Team!
+                {{
+                    !authService.isReadonly ? 
+                    'Bald ist es wieder so weit und die Herausforderung beginnt von Neuem. Verliere keine Minute und registriere dich und dein Team!' :
+                    'Bald ist es wieder so weit und die Herausforderung beginnt von Neuem. Verliere keine Minute und schaue dir die Turnierübersicht an!'
+                }}
             </p>
-            <button class="with-glow" [routerLink]="'/register'">
-                Jetzt anmelden
+            <button class="with-glow" (click)="onClick()">
+                {{ !authService.isReadonly ? authService.isLoggedIn ? 'Zur Übersicht' : 'Jetzt anmelden' : 'Zur Turnierübersicht'}}
             </button>
         </div>
         <div class="nav-toggle" (click)="isNavOpen = true">
@@ -24,8 +28,9 @@
         <ul>
             <li [routerLinkActive]="'active'" [routerLink]="'/home'">Home</li>
             <li [routerLink]="'/tournaments'">Turniere</li>
-            <li [routerLink]="'/register'">Registrieren</li>
-            <li [routerLink]="'/login'">Anmelden</li>
+            <li [routerLink]="'/register'" *ngIf="!authService.isLoggedIn && !authService.isReadonly">Registrieren</li>
+            <li [routerLink]="'/login'" *ngIf="!authService.isLoggedIn && !authService.isReadonly">Anmelden</li>
+            <li *ngIf="authService.isLoggedIn" (click)="onSignOut()">Abmelden</li>
         </ul>
         <div class="nav-close" (click)="isNavOpen = false">
             <div class="line"></div>
